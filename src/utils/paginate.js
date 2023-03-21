@@ -5,5 +5,5 @@ export function paginate(items, pageNumber, pageSize, setActivePage) {
     } else {
         setActivePage(pageNumber - 1);
         return arrItems;
-    }
+    };
 }
