@@ -1,6 +1,6 @@
 import React from "react";
 import Bookmark from "./Bookmark";
-import Qualities from "./Qualities";
+import Quality from "./Quality";
 import PropTypes from "prop-types";
 
 const User = (props) => {
@@ -10,7 +10,7 @@ const User = (props) => {
             <th>{user.name}</th>
             <td>
                 {user.qualities.map((elem) => (
-                    <Qualities
+                    <Quality
                         key={elem._id}
                         color={elem.color}
                         name={elem.name}
