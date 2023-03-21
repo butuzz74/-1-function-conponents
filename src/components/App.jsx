@@ -20,10 +20,7 @@ const App = () => {
     };
 
     return !users.length
-        ? (<h1 className="badge bg-danger fs-2">
-            Никто не тусанет с тобой сегодня
-        </h1>
-        )
+        ? <Header users={users} />
         : (
             <>
                 <Header users={users} />
