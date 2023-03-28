@@ -1,28 +1,33 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const GroupList = ({ items, onItemSelect, selectedProf, onClearFiltered }) => {
+const GroupList = ({
+    items,
+    onSelectedProf,
+    selectedProf,
+    onClearSelected
+}) => {
     return (
         <>
             <ul className="list-group">
-                {Object.keys(items).map((key) => (
+                {Object.keys(items).map((item) => (
                     <li
+                        key={items[item]._id}
                         className={`list-group-item + ${
-                            items[key] === selectedProf ? "active" : null
+                            selectedProf === items[item] ? "active" : ""
                         }`}
                         role="button"
-                        key={items[key]._id}
-                        onClick={() => onItemSelect(items[key])}
+                        onClick={() => onSelectedProf(items[item])}
                     >
-                        {items[key].name}
+                        {items[item].name}
                     </li>
                 ))}
                 <li
-                    className="list-group-item"
+                    className="list-group-item active mt-2"
                     role="button"
-                    onClick={onClearFiltered}
+                    onClick={onClearSelected}
                 >
-                    Oчистить
+                    Очистить
                 </li>
             </ul>
         </>
@@ -30,8 +35,8 @@ const GroupList = ({ items, onItemSelect, selectedProf, onClearFiltered }) => {
 };
 GroupList.propTypes = {
     items: PropTypes.object.isRequired,
-    onItemSelect: PropTypes.func.isRequired,
-    selectedProf: PropTypes.object,
-    onClearFiltered: PropTypes.func
+    onSelectedProf: PropTypes.func.isRequired,
+    selectedProf: PropTypes.object.isRequired,
+    onClearSelected: PropTypes.func.isRequired
 };
 export default GroupList;
