@@ -8,14 +8,15 @@ import { paginate } from "../utils/paginate";
 import PropTypes from "prop-types";
 
 const Users = (props) => {
+    const { users, handleDeleteUser, handleNothingFavorite } = props;
     const pageSize = 2;
 
     const [activePage, setActivePage] = useState(1);
-    const [items, setItems] = useState();
+    const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
 
     useEffect(() => {
-        API.professions.fetchAll().then((data) => setItems(data));
+        API.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
 
     const handleActivePage = (pageIndex) => {
@@ -29,8 +30,12 @@ const Users = (props) => {
         setSelectedProf();
     };
     const filteredUsers = selectedProf
-        ? props.users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
-        : props.users;
+        ? users.filter(
+            (user) =>
+                JSON.stringify(user.profession) ===
+                  JSON.stringify(selectedProf)
+        )
+        : users;
 
     const userCrop = paginate(
         filteredUsers,
@@ -38,16 +43,19 @@ const Users = (props) => {
         pageSize,
         setActivePage
     );
-    const count = filteredUsers.length;
-    console.log(props.users);
+    const itemsCount = filteredUsers.length;
+    useEffect(() => {
+        if (!filteredUsers.length) {
+            setSelectedProf();
+        }
+    }, [filteredUsers]);
     return (
         <>
             <div className="d-flex">
-                <div className="d-flex flex-column flex-shrink-0 p-3 width=200px">
-                    <Header users={filteredUsers} />
-                    {items && (
+                <div className="d-flex flex-column flex-shrink-0 p-3 width=200px group">
+                    {professions && (
                         <GroupList
-                            items={items}
+                            professions={professions}
                             onSelectedProf={handleSelectedProf}
                             selectedProf={selectedProf}
                             onClearSelected={handleClearSelected}
@@ -55,6 +63,7 @@ const Users = (props) => {
                     )}
                 </div>
                 <div className="d-flex flex-column">
+                    <Header users={filteredUsers} />
                     <table className="table">
                         <thead className="border-bottom-0 border-2">
                             <tr>
@@ -73,8 +82,8 @@ const Users = (props) => {
                                     <User
                                         key={user._id}
                                         user={user}
-                                        handleDelete={props.handleDelete}
-                                        handleChange={props.handleChange}
+                                        handleDeleteUser={handleDeleteUser}
+                                        handleNothingFavorite={handleNothingFavorite}
                                     />
                                 ))
                                 : null}
@@ -84,7 +93,7 @@ const Users = (props) => {
             </div>
             <div className="d-flex justify-content-center">
                 <Pagination
-                    itemsCount={count}
+                    itemsCount={itemsCount}
                     pageSize={pageSize}
                     activePage={activePage}
                     handleActivePage={handleActivePage}
@@ -95,7 +104,7 @@ const Users = (props) => {
 };
 Users.propTypes = {
     users: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    handleDelete: PropTypes.func.isRequired,
-    handleChange: PropTypes.func.isRequired
+    handleDeleteUser: PropTypes.func.isRequired,
+    handleNothingFavorite: PropTypes.func.isRequired
 };
 export default Users;

@@ -7,10 +7,10 @@ const App = () => {
     useEffect(() => {
         API.users.fetchAll().then((data) => setUsers(data));
     }, []);
-    const handleDelete = (id) => {
+    const handleDeleteUser = (id) => {
         setUsers(users.filter((user) => user._id !== id));
     };
-    const handleChange = (id) => {
+    const handleNothingFavorite = (id) => {
         setUsers(
             users.map((user) => {
                 if (user._id === id) {
@@ -25,8 +25,8 @@ const App = () => {
         users && (
             <Users
                 users={users}
-                handleDelete={handleDelete}
-                handleChange={handleChange}
+                handleDeleteUser={handleDeleteUser}
+                handleNothingFavorite={handleNothingFavorite}
             />
         )
     );

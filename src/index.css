@@ -28,3 +28,6 @@ code {
 .bookmark i {
     cursor: pointer;
 }
+.group{
+    width: 300px;
+}

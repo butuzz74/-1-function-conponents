@@ -4,7 +4,7 @@ import Quality from "./Quality";
 import PropTypes from "prop-types";
 
 const User = (props) => {
-    const { user, handleDelete, handleChange } = props;
+    const { user, handleDeleteUser, handleNothingFavorite } = props;
     return (
         <tr>
             <th>{user.name}</th>
@@ -24,14 +24,14 @@ const User = (props) => {
                 <Bookmark
                     bookmark={user.bookmark}
                     id={user._id}
-                    handleChange={handleChange}
+                    handleNothingFavorite={handleNothingFavorite}
                 />
             </td>
             <td>
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handleDelete(user._id)}
+                    onClick={() => handleDeleteUser(user._id)}
                 >
                     Delete
                 </button>
@@ -41,8 +41,8 @@ const User = (props) => {
 };
 User.propTypes = {
     user: PropTypes.object.isRequired,
-    handleDelete: PropTypes.func.isRequired,
-    handleChange: PropTypes.func.isRequired
+    handleDeleteUser: PropTypes.func.isRequired,
+    handleNothingFavorite: PropTypes.func.isRequired
 };
 
 export default User;

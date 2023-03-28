@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const GroupList = ({
-    items,
+    professions,
     onSelectedProf,
     selectedProf,
     onClearSelected
@@ -10,16 +10,16 @@ const GroupList = ({
     return (
         <>
             <ul className="list-group">
-                {Object.keys(items).map((item) => (
+                {Object.keys(professions).map((item) => (
                     <li
-                        key={items[item]._id}
+                        key={professions[item]._id}
                         className={`list-group-item + ${
-                            selectedProf === items[item] ? "active" : ""
+                            selectedProf === professions[item] ? "active" : ""
                         }`}
                         role="button"
-                        onClick={() => onSelectedProf(items[item])}
+                        onClick={() => onSelectedProf(professions[item])}
                     >
-                        {items[item].name}
+                        {professions[item].name}
                     </li>
                 ))}
                 <li
@@ -34,7 +34,7 @@ const GroupList = ({
     );
 };
 GroupList.propTypes = {
-    items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    professions: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     onSelectedProf: PropTypes.func.isRequired,
     selectedProf: PropTypes.object,
     onClearSelected: PropTypes.func.isRequired
