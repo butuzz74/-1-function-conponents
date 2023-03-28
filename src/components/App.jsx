@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import API from "../api";
+import Header from "./Header";
 import Users from "./Users";
 
 const App = () => {
@@ -18,11 +19,18 @@ const App = () => {
         );
     };
 
-    return <Users
-        users={users}
-        handleDelete={handleDelete}
-        handleChange={handleChange}
-    />;
+    return !users.length
+        ? <Header users={users} />
+        : (
+            <>
+                <Header users={users} />
+                <Users
+                    users={users}
+                    handleDelete={handleDelete}
+                    handleChange={handleChange}
+                />
+            </>
+        );
 };
 
 export default App;
