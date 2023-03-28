@@ -34,9 +34,9 @@ const GroupList = ({
     );
 };
 GroupList.propTypes = {
-    items: PropTypes.object.isRequired,
+    items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     onSelectedProf: PropTypes.func.isRequired,
-    selectedProf: PropTypes.object.isRequired,
+    selectedProf: PropTypes.object,
     onClearSelected: PropTypes.func.isRequired
 };
 export default GroupList;

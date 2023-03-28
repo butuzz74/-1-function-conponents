@@ -16,7 +16,7 @@ const Header = (props) => {
     };
 };
 Header.propTypes = {
-    users: PropTypes.array.isRequired
+    users: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 export default Header;

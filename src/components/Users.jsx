@@ -29,7 +29,7 @@ const Users = (props) => {
         setSelectedProf();
     };
     const filteredUsers = selectedProf
-        ? props.users.filter((user) => user.profession === selectedProf)
+        ? props.users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
         : props.users;
 
     const userCrop = paginate(
@@ -39,6 +39,7 @@ const Users = (props) => {
         setActivePage
     );
     const count = filteredUsers.length;
+    console.log(props.users);
     return (
         <>
             <div className="d-flex">
@@ -93,7 +94,7 @@ const Users = (props) => {
     );
 };
 Users.propTypes = {
-    users: PropTypes.array.isRequired,
+    users: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     handleDelete: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired
 };

@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import API from "../api";
 import Users from "./Users";
 
 const App = () => {
-    const [users, setUsers] = useState(API.users.fetchAll());
+    const [users, setUsers] = useState();
+    useEffect(() => {
+        API.users.fetchAll().then((data) => setUsers(data));
+    }, []);
     const handleDelete = (id) => {
         setUsers(users.filter((user) => user._id !== id));
     };
@@ -18,11 +21,15 @@ const App = () => {
         );
     };
 
-    return <Users
-        users={users}
-        handleDelete={handleDelete}
-        handleChange={handleChange}
-    />;
+    return (
+        users && (
+            <Users
+                users={users}
+                handleDelete={handleDelete}
+                handleChange={handleChange}
+            />
+        )
+    );
 };
 
 export default App;
