@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Header = (props) => {
-    if (!props.users.length) {
+    console.log(props.users.length);
+    if (!props.users.length || props.users.length === 0) {
         return <h1 className="badge bg-danger fs-2">
             Никто не тусанет с тобой сегодня </h1>;
     } else {
