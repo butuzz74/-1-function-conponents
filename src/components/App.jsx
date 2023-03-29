@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API from "../api";
 import Users from "./Users";
+import Preloader from "./Preloader";
 
 const App = () => {
     const [users, setUsers] = useState();
@@ -22,13 +23,15 @@ const App = () => {
     };
 
     return (
-        users && (
-            <Users
-                users={users}
-                handleDeleteUser={handleDeleteUser}
-                handleNothingFavorite={handleNothingFavorite}
-            />
-        )
+        users
+            ? (
+                <Users
+                    users={users}
+                    handleDeleteUser={handleDeleteUser}
+                    handleNothingFavorite={handleNothingFavorite}
+                />
+            )
+            : <Preloader/>
     );
 };
 

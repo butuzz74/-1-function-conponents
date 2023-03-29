@@ -25,6 +25,7 @@ const Users = (props) => {
 
     const handleSelectedProf = (item) => {
         setSelectedProf(item);
+        console.log(item);
     };
     const handleClearSelected = () => {
         setSelectedProf();
@@ -44,62 +45,74 @@ const Users = (props) => {
         setActivePage
     );
     const itemsCount = filteredUsers.length;
+
     useEffect(() => {
         if (!filteredUsers.length) {
             setSelectedProf();
         }
     }, [filteredUsers]);
+
     return (
-        <>
-            <div className="d-flex">
-                <div className="d-flex flex-column flex-shrink-0 p-3 width=200px group">
-                    {professions && (
-                        <GroupList
-                            professions={professions}
-                            onSelectedProf={handleSelectedProf}
-                            selectedProf={selectedProf}
-                            onClearSelected={handleClearSelected}
-                        />
-                    )}
+        <div>
+            {users && professions &&
+                (<><div className="d-flex">
+                    <div className="d-flex flex-column flex-shrink-0 p-3 width=200px group">
+                        {professions && (
+                            <GroupList
+                                professions={professions}
+                                onSelectedProf={handleSelectedProf}
+                                selectedProf={selectedProf}
+                                onClearSelected={handleClearSelected}
+                            />
+                        )}
+                    </div>
+                    <div className="d-flex flex-column">
+                        <Header users={filteredUsers} />
+                        {users.length
+                            ? (
+                                <table className="table">
+                                    <thead className="border-bottom-0 border-2">
+                                        <tr>
+                                            <th>Имя</th>
+                                            <th>Качества</th>
+                                            <th>Профессия</th>
+                                            <th>Встретился, раз</th>
+                                            <th>Оценка</th>
+                                            <th>Избранное</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {userCrop
+                                            ? userCrop.map((user) => (
+                                                <User
+                                                    key={user._id}
+                                                    user={user}
+                                                    handleDeleteUser={
+                                                        handleDeleteUser
+                                                    }
+                                                    handleNothingFavorite={
+                                                        handleNothingFavorite
+                                                    }
+                                                />
+                                            ))
+                                            : null}
+                                    </tbody>
+                                </table>
+                            )
+                            : null}
+                    </div>
                 </div>
-                <div className="d-flex flex-column">
-                    <Header users={filteredUsers} />
-                    <table className="table">
-                        <thead className="border-bottom-0 border-2">
-                            <tr>
-                                <th>Имя</th>
-                                <th>Качества</th>
-                                <th>Профессия</th>
-                                <th>Встретился, раз</th>
-                                <th>Оценка</th>
-                                <th>Избранное</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {userCrop
-                                ? userCrop.map((user) => (
-                                    <User
-                                        key={user._id}
-                                        user={user}
-                                        handleDeleteUser={handleDeleteUser}
-                                        handleNothingFavorite={handleNothingFavorite}
-                                    />
-                                ))
-                                : null}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div className="d-flex justify-content-center">
-                <Pagination
-                    itemsCount={itemsCount}
-                    pageSize={pageSize}
-                    activePage={activePage}
-                    handleActivePage={handleActivePage}
-                />
-            </div>
-        </>
+                <div className="d-flex justify-content-center">
+                    <Pagination
+                        itemsCount={itemsCount}
+                        pageSize={pageSize}
+                        activePage={activePage}
+                        handleActivePage={handleActivePage}
+                    />
+                </div></>)
+            }
+        </div>
     );
 };
 Users.propTypes = {
