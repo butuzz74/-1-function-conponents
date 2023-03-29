@@ -4,6 +4,7 @@ import Pagination from "./Pagination";
 import GroupList from "./GroupList";
 import Header from "./Header";
 import API from "../api";
+import _ from "lodash";
 import { paginate } from "../utils/paginate";
 import PropTypes from "prop-types";
 
@@ -25,7 +26,6 @@ const Users = (props) => {
 
     const handleSelectedProf = (item) => {
         setSelectedProf(item);
-        console.log(item);
     };
     const handleClearSelected = () => {
         setSelectedProf();
@@ -33,8 +33,10 @@ const Users = (props) => {
     const filteredUsers = selectedProf
         ? users.filter(
             (user) =>
-                JSON.stringify(user.profession) ===
-                  JSON.stringify(selectedProf)
+                _.isEqual(user.profession, selectedProf)
+                // Или так
+            // JSON.stringify(user.profession) ===
+            //   JSON.stringify(selectedProf)
         )
         : users;
 
