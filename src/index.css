@@ -28,3 +28,13 @@ code {
 .bookmark i {
     cursor: pointer;
 }
+.group{
+    width: 300px;
+}
+.preloader{
+    margin-top: 250px;    
+}
+.loading{
+    margin-top: 30px;
+}
+

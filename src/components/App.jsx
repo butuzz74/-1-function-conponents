@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import API from "../api";
-import Header from "./Header";
 import Users from "./Users";
+import Preloader from "./Preloader";
 
 const App = () => {
-    const [users, setUsers] = useState(API.users.fetchAll());
-    const handleDelete = (id) => {
+    const [users, setUsers] = useState();
+    useEffect(() => {
+        API.users.fetchAll().then((data) => setUsers(data));
+    }, []);
+    const handleDeleteUser = (id) => {
         setUsers(users.filter((user) => user._id !== id));
     };
-    const handleChange = (id) => {
+    const handleNothingFavorite = (id) => {
         setUsers(
             users.map((user) => {
                 if (user._id === id) {
@@ -19,18 +22,17 @@ const App = () => {
         );
     };
 
-    return !users.length
-        ? <Header users={users} />
-        : (
-            <>
-                <Header users={users} />
+    return (
+        users
+            ? (
                 <Users
                     users={users}
-                    handleDelete={handleDelete}
-                    handleChange={handleChange}
+                    handleDeleteUser={handleDeleteUser}
+                    handleNothingFavorite={handleNothingFavorite}
                 />
-            </>
-        );
+            )
+            : <Preloader/>
+    );
 };
 
 export default App;
