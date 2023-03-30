@@ -17,15 +17,15 @@ const GroupList = ({
                     <li
                         key={professions[item][valueProperty]}
                         className={
-                            arrProfessions.includes(professions[item])
-                                ? contentProperty(
+                            arrProfessions.includes((professions[item][contentProperty]))
+                                ? (
                                     `list-group-item + ${
                                         selectedProf === professions[item]
                                             ? "active"
                                             : ""
                                     }`
                                 )
-                                : "list-group-item list-group-item-danger"
+                                : "list-group-item list-group-item-action disabled"
                         }
                         role="button"
                         onClick={() => onSelectedProf(professions[item])}
