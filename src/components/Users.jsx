@@ -19,6 +19,7 @@ const Users = (props) => {
     useEffect(() => {
         API.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
+    const arrProfessions = users.map(item => item.profession.name);
 
     const handleActivePage = (pageIndex) => {
         setActivePage(pageIndex);
@@ -65,6 +66,7 @@ const Users = (props) => {
                                 onSelectedProf={handleSelectedProf}
                                 selectedProf={selectedProf}
                                 onClearSelected={handleClearSelected}
+                                arrProfessions={arrProfessions}
                             />
                         )}
                     </div>

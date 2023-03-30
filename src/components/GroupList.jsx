@@ -7,7 +7,8 @@ const GroupList = ({
     selectedProf,
     onClearSelected,
     valueProperty,
-    contentProperty
+    contentProperty,
+    arrProfessions
 }) => {
     return (
         <>
@@ -15,9 +16,17 @@ const GroupList = ({
                 {Object.keys(professions).map((item) => (
                     <li
                         key={professions[item][valueProperty]}
-                        className={`list-group-item + ${
-                            selectedProf === professions[item] ? "active" : ""
-                        }`}
+                        className={
+                            arrProfessions.includes(professions[item])
+                                ? contentProperty(
+                                    `list-group-item + ${
+                                        selectedProf === professions[item]
+                                            ? "active"
+                                            : ""
+                                    }`
+                                )
+                                : "list-group-item list-group-item-danger"
+                        }
                         role="button"
                         onClick={() => onSelectedProf(professions[item])}
                     >
@@ -45,6 +54,7 @@ GroupList.propTypes = {
     selectedProf: PropTypes.object,
     onClearSelected: PropTypes.func.isRequired,
     valueProperty: PropTypes.string.isRequired,
-    contentProperty: PropTypes.string.isRequired
+    contentProperty: PropTypes.string.isRequired,
+    arrProfessions: PropTypes.array
 };
 export default GroupList;
