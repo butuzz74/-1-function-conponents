@@ -9,7 +9,6 @@ const GroupList = ({
     valueProperty,
     contentProperty
 }) => {
-    console.log(Array.isArray(professions));
     return (
         <>
             <ul className="list-group">
