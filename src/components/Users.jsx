@@ -15,6 +15,7 @@ const Users = (props) => {
     const [activePage, setActivePage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [deactiveProf, setDeactiveProf] = useState();
 
     useEffect(() => {
         API.professions.fetchAll().then((data) => setProfessions(data));
@@ -26,7 +27,9 @@ const Users = (props) => {
 
     const handleSelectedProf = (item) => {
         setSelectedProf(item);
+        setDeactiveProf(item.name);
     };
+    console.log(deactiveProf);
     const handleClearSelected = () => {
         setSelectedProf();
     };
