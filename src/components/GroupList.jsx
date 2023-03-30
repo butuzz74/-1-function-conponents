@@ -5,21 +5,26 @@ const GroupList = ({
     professions,
     onSelectedProf,
     selectedProf,
-    onClearSelected
+    onClearSelected,
+    valueProperty,
+    contentProperty
 }) => {
+    const arrProfessions = Array.isArray(professions)
+        ? professions
+        : Object.values(professions);
     return (
         <>
             <ul className="list-group">
-                {Object.keys(professions).map((item) => (
+                {arrProfessions.map((item) => (
                     <li
-                        key={professions[item]._id}
+                        key={item[valueProperty]}
                         className={`list-group-item + ${
-                            selectedProf === professions[item] ? "active" : ""
+                            selectedProf === item ? "active" : ""
                         }`}
                         role="button"
-                        onClick={() => onSelectedProf(professions[item])}
+                        onClick={() => onSelectedProf(item)}
                     >
-                        {professions[item].name}
+                        {item[contentProperty]}
                     </li>
                 ))}
                 <li
@@ -33,10 +38,16 @@ const GroupList = ({
         </>
     );
 };
+GroupList.defaultProps = {
+    valueProperty: "_id",
+    contentProperty: "name"
+};
 GroupList.propTypes = {
     professions: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     onSelectedProf: PropTypes.func.isRequired,
     selectedProf: PropTypes.object,
-    onClearSelected: PropTypes.func.isRequired
+    onClearSelected: PropTypes.func.isRequired,
+    valueProperty: PropTypes.string.isRequired,
+    contentProperty: PropTypes.string.isRequired
 };
 export default GroupList;
