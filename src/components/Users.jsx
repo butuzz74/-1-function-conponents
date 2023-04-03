@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import User from "./User";
 import Pagination from "./Pagination";
+import UsersTable from "./UsersTable";
 import GroupList from "./GroupList";
 import Header from "./Header";
 import API from "../api";
@@ -10,16 +10,17 @@ import PropTypes from "prop-types";
 
 const Users = (props) => {
     const { users, handleDeleteUser, handleNothingFavorite } = props;
-    const pageSize = 2;
+    const pageSize = 8;
 
     const [activePage, setActivePage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
 
     useEffect(() => {
         API.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
-    const arrProfessions = users.map(item => item.profession.name);
+    const arrProfessions = users.map((item) => item.profession.name);
 
     const handleActivePage = (pageIndex) => {
         setActivePage(pageIndex);
@@ -31,22 +32,15 @@ const Users = (props) => {
     const handleClearSelected = () => {
         setSelectedProf();
     };
+    const handleSort = (item) => {
+        setSortBy(item);
+    };
     const filteredUsers = selectedProf
-        ? users.filter(
-            (user) =>
-                _.isEqual(user.profession, selectedProf)
-                // Или так
-            // JSON.stringify(user.profession) ===
-            //   JSON.stringify(selectedProf)
-        )
+        ? users.filter((user) => _.isEqual(user.profession, selectedProf))
         : users;
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
 
-    const userCrop = paginate(
-        filteredUsers,
-        activePage,
-        pageSize,
-        setActivePage
-    );
+    const userCrop = paginate(sortedUsers, activePage, pageSize, setActivePage);
     const itemsCount = filteredUsers.length;
 
     useEffect(() => {
@@ -57,65 +51,47 @@ const Users = (props) => {
 
     return (
         <div>
-            {users && professions &&
-                (<><div className="d-flex">
-                    <div className="d-flex flex-column flex-shrink-0 p-3 width=200px group">
-                        {professions && (
-                            <GroupList
-                                professions={professions}
-                                onSelectedProf={handleSelectedProf}
-                                selectedProf={selectedProf}
-                                onClearSelected={handleClearSelected}
-                                arrProfessions={arrProfessions}
-                            />
-                        )}
+            {users && professions && (
+                <>
+                    <div className="d-flex">
+                        <div className="d-flex flex-column flex-shrink-0 p-3 width=200px group">
+                            {professions && (
+                                <GroupList
+                                    professions={professions}
+                                    onSelectedProf={handleSelectedProf}
+                                    selectedProf={selectedProf}
+                                    onClearSelected={handleClearSelected}
+                                    arrProfessions={arrProfessions}
+                                />
+                            )}
+                        </div>
+                        <div className="d-flex flex-column">
+                            <Header users={filteredUsers} />
+                            {users.length
+                                ? (
+                                    <UsersTable
+                                        userCrop={userCrop}
+                                        handleDeleteUser={handleDeleteUser}
+                                        handleNothingFavorite={
+                                            handleNothingFavorite
+                                        }
+                                        onSort={handleSort}
+                                        currentSort={sortBy}
+                                    />
+                                )
+                                : null}
+                        </div>
                     </div>
-                    <div className="d-flex flex-column">
-                        <Header users={filteredUsers} />
-                        {users.length
-                            ? (
-                                <table className="table">
-                                    <thead className="border-bottom-0 border-2">
-                                        <tr>
-                                            <th>Имя</th>
-                                            <th>Качества</th>
-                                            <th>Профессия</th>
-                                            <th>Встретился, раз</th>
-                                            <th>Оценка</th>
-                                            <th>Избранное</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {userCrop
-                                            ? userCrop.map((user) => (
-                                                <User
-                                                    key={user._id}
-                                                    user={user}
-                                                    handleDeleteUser={
-                                                        handleDeleteUser
-                                                    }
-                                                    handleNothingFavorite={
-                                                        handleNothingFavorite
-                                                    }
-                                                />
-                                            ))
-                                            : null}
-                                    </tbody>
-                                </table>
-                            )
-                            : null}
+                    <div className="d-flex justify-content-center">
+                        <Pagination
+                            itemsCount={itemsCount}
+                            pageSize={pageSize}
+                            activePage={activePage}
+                            handleActivePage={handleActivePage}
+                        />
                     </div>
-                </div>
-                <div className="d-flex justify-content-center">
-                    <Pagination
-                        itemsCount={itemsCount}
-                        pageSize={pageSize}
-                        activePage={activePage}
-                        handleActivePage={handleActivePage}
-                    />
-                </div></>)
-            }
+                </>
+            )}
         </div>
     );
 };
