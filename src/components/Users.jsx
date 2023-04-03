@@ -1,24 +1,43 @@
 import React, { useState, useEffect } from "react";
-import User from "./User";
 import Pagination from "./Pagination";
+import UsersTable from "./UsersTable";
 import GroupList from "./GroupList";
 import Header from "./Header";
+import Preloader from "./Preloader";
 import API from "../api";
 import _ from "lodash";
 import { paginate } from "../utils/paginate";
-import PropTypes from "prop-types";
 
-const Users = (props) => {
-    const { users, handleDeleteUser, handleNothingFavorite } = props;
-    const pageSize = 2;
+const Users = () => {
+    const pageSize = 8;
 
+    const [users, setUsers] = useState();
     const [activePage, setActivePage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+
+    useEffect(() => {
+        API.users.fetchAll().then((data) => setUsers(data));
+    }, []);
 
     useEffect(() => {
         API.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
+
+    const handleDeleteUser = (id) => {
+        setUsers(users.filter((user) => user._id !== id));
+    };
+    const handleNothingFavorite = (id) => {
+        setUsers(
+            users.map((user) => {
+                if (user._id === id) {
+                    user.bookmark = !user.bookmark;
+                }
+                return user;
+            })
+        );
+    };
 
     const handleActivePage = (pageIndex) => {
         setActivePage(pageIndex);
@@ -30,96 +49,81 @@ const Users = (props) => {
     const handleClearSelected = () => {
         setSelectedProf();
     };
-    const filteredUsers = selectedProf
-        ? users.filter(
-            (user) =>
-                _.isEqual(user.profession, selectedProf)
-                // Или так
-            // JSON.stringify(user.profession) ===
-            //   JSON.stringify(selectedProf)
-        )
-        : users;
+    const handleSort = (item) => {
+        setSortBy(item);
+    };
 
-    const userCrop = paginate(
-        filteredUsers,
-        activePage,
-        pageSize,
-        setActivePage
-    );
-    const itemsCount = filteredUsers.length;
+    if (users && professions) {
+        const arrProfessions = users.map((item) => item.profession.name);
+        const filteredUsers = selectedProf
+            ? users.filter((user) => _.isEqual(user.profession, selectedProf))
+            : users;
+        const sortedUsers = _.orderBy(
+            filteredUsers,
+            [sortBy.iter],
+            [sortBy.order]
+        );
 
-    useEffect(() => {
+        const userCrop = paginate(
+            sortedUsers,
+            activePage,
+            pageSize,
+            setActivePage
+        );
+        const itemsCount = filteredUsers.length;
+
         if (!filteredUsers.length) {
             setSelectedProf();
         }
-    }, [filteredUsers]);
 
-    return (
-        <div>
-            {users && professions &&
-                (<><div className="d-flex">
-                    <div className="d-flex flex-column flex-shrink-0 p-3 width=200px group">
-                        {professions && (
-                            <GroupList
-                                professions={professions}
-                                onSelectedProf={handleSelectedProf}
-                                selectedProf={selectedProf}
-                                onClearSelected={handleClearSelected}
+        return (
+            <div>
+                {users && professions && (
+                    <>
+                        <div className="d-flex">
+                            <div className="d-flex flex-column flex-shrink-0 p-3 width=200px group">
+                                {professions && (
+                                    <GroupList
+                                        professions={professions}
+                                        onSelectedProf={handleSelectedProf}
+                                        selectedProf={selectedProf}
+                                        onClearSelected={handleClearSelected}
+                                        arrProfessions={arrProfessions}
+                                    />
+                                )}
+                            </div>
+                            <div className="d-flex flex-column">
+                                <Header users={filteredUsers} />
+                                {users.length
+                                    ? (
+                                        <UsersTable
+                                            userCrop={userCrop}
+                                            handleDeleteUser={handleDeleteUser}
+                                            handleNothingFavorite={
+                                                handleNothingFavorite
+                                            }
+                                            onSort={handleSort}
+                                            currentSort={sortBy}
+                                        />
+                                    )
+                                    : null}
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                            <Pagination
+                                itemsCount={itemsCount}
+                                pageSize={pageSize}
+                                activePage={activePage}
+                                handleActivePage={handleActivePage}
                             />
-                        )}
-                    </div>
-                    <div className="d-flex flex-column">
-                        <Header users={filteredUsers} />
-                        {users.length
-                            ? (
-                                <table className="table">
-                                    <thead className="border-bottom-0 border-2">
-                                        <tr>
-                                            <th>Имя</th>
-                                            <th>Качества</th>
-                                            <th>Профессия</th>
-                                            <th>Встретился, раз</th>
-                                            <th>Оценка</th>
-                                            <th>Избранное</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {userCrop
-                                            ? userCrop.map((user) => (
-                                                <User
-                                                    key={user._id}
-                                                    user={user}
-                                                    handleDeleteUser={
-                                                        handleDeleteUser
-                                                    }
-                                                    handleNothingFavorite={
-                                                        handleNothingFavorite
-                                                    }
-                                                />
-                                            ))
-                                            : null}
-                                    </tbody>
-                                </table>
-                            )
-                            : null}
-                    </div>
-                </div>
-                <div className="d-flex justify-content-center">
-                    <Pagination
-                        itemsCount={itemsCount}
-                        pageSize={pageSize}
-                        activePage={activePage}
-                        handleActivePage={handleActivePage}
-                    />
-                </div></>)
-            }
-        </div>
-    );
+                        </div>
+                    </>
+                )}
+            </div>
+        );
+    } else {
+        return <Preloader />;
+    }
 };
-Users.propTypes = {
-    users: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    handleDeleteUser: PropTypes.func.isRequired,
-    handleNothingFavorite: PropTypes.func.isRequired
-};
+
 export default Users;

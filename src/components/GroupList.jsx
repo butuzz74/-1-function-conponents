@@ -7,24 +7,30 @@ const GroupList = ({
     selectedProf,
     onClearSelected,
     valueProperty,
-    contentProperty
+    contentProperty,
+    arrProfessions
 }) => {
-    const arrProfessions = Array.isArray(professions)
-        ? professions
-        : Object.values(professions);
     return (
         <>
             <ul className="list-group">
-                {arrProfessions.map((item) => (
+                {Object.keys(professions).map((item) => (
                     <li
-                        key={item[valueProperty]}
-                        className={`list-group-item + ${
-                            selectedProf === item ? "active" : ""
-                        }`}
+                        key={professions[item][valueProperty]}
+                        className={
+                            arrProfessions.includes((professions[item][contentProperty]))
+                                ? (
+                                    `list-group-item + ${
+                                        selectedProf === professions[item]
+                                            ? "active"
+                                            : ""
+                                    }`
+                                )
+                                : "list-group-item list-group-item-action disabled"
+                        }
                         role="button"
-                        onClick={() => onSelectedProf(item)}
+                        onClick={() => onSelectedProf(professions[item])}
                     >
-                        {item[contentProperty]}
+                        {professions[item][contentProperty]}
                     </li>
                 ))}
                 <li
@@ -48,6 +54,7 @@ GroupList.propTypes = {
     selectedProf: PropTypes.object,
     onClearSelected: PropTypes.func.isRequired,
     valueProperty: PropTypes.string.isRequired,
-    contentProperty: PropTypes.string.isRequired
+    contentProperty: PropTypes.string.isRequired,
+    arrProfessions: PropTypes.array
 };
 export default GroupList;
