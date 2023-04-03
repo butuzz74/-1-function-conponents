@@ -9,7 +9,7 @@ import _ from "lodash";
 import { paginate } from "../utils/paginate";
 
 const Users = () => {
-    const pageSize = 2;
+    const pageSize = 8;
 
     const [users, setUsers] = useState();
     const [activePage, setActivePage] = useState(1);

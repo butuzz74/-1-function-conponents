@@ -18,10 +18,23 @@ const TableHeader = ({ onSort, currentSort, colums }) => {
                 {Object.keys(colums).map((colum) => (
                     <th
                         key={colum}
-                        onClick={colums[colum].iter ? () => handleSort(colums[colum].iter) : undefined}
+                        onClick={
+                            colums[colum].iter
+                                ? () => handleSort(colums[colum].iter)
+                                : undefined
+                        }
                         role={colums[colum].iter ? "button" : undefined}
                     >
                         {colums[colum].name}
+                        {colums[colum].iter && currentSort.order === "asc" && colums[colum].iter === currentSort.iter
+                            ? (
+                                <i className="bi bi-caret-up-fill"></i>
+                            )
+                            : colums[colum].iter && currentSort.order === "desc" && colums[colum].iter === currentSort.iter
+                                ? (
+                                    <i className="bi bi-caret-down-fill"></i>
+                                )
+                                : undefined}
                     </th>
                 ))}
             </tr>
