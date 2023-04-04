@@ -10,17 +10,18 @@ const GroupList = ({
     contentProperty,
     arrProfessions
 }) => {
+    const professionsArr = Array.isArray(professions) ? professions : Object.values(professions);
     return (
         <>
             <ul className="list-group">
-                {Object.keys(professions).map((item) => (
+                {professionsArr.map((item) => (
                     <li
-                        key={professions[item][valueProperty]}
+                        key={item[valueProperty]}
                         className={
-                            arrProfessions.includes((professions[item][contentProperty]))
+                            arrProfessions.includes((item[contentProperty]))
                                 ? (
                                     `list-group-item + ${
-                                        selectedProf === professions[item]
+                                        selectedProf === item
                                             ? "active"
                                             : ""
                                     }`
@@ -28,9 +29,9 @@ const GroupList = ({
                                 : "list-group-item list-group-item-action disabled"
                         }
                         role="button"
-                        onClick={() => onSelectedProf(professions[item])}
+                        onClick={() => onSelectedProf(item)}
                     >
-                        {professions[item][contentProperty]}
+                        {item[contentProperty]}
                     </li>
                 ))}
                 <li
