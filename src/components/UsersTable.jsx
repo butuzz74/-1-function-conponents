@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import Bookmark from "./Bookmark";
 import QualitiesList from "./QualitiesList";
 import Table from "./Table";
+import Name from "./Name";
 
 const UsersTable = ({
     userCrop,
@@ -14,7 +15,7 @@ const UsersTable = ({
     onSort
 }) => {
     const colums = {
-        name: { iter: "name", name: "Имя" },
+        name: { iter: "name", name: "Имя", component: (user) => <Name user={user}/> },
         qualities: {
             name: "Качества",
             component: (user) => <QualitiesList user={user} />
