@@ -8,7 +8,7 @@ import API from "../api";
 import _ from "lodash";
 import { paginate } from "../utils/paginate";
 
-const Users = () => {
+const UsersList = () => {
     const pageSize = 8;
 
     const [users, setUsers] = useState();
@@ -126,4 +126,4 @@ const Users = () => {
     }
 };
 
-export default Users;
+export default UsersList;
