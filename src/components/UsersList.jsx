@@ -7,6 +7,7 @@ import Preloader from "./Preloader";
 import API from "../api";
 import _ from "lodash";
 import { paginate } from "../utils/paginate";
+import Search from "./Search";
 
 const UsersList = () => {
     const pageSize = 8;
@@ -16,6 +17,7 @@ const UsersList = () => {
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         API.users.fetchAll().then((data) => setUsers(data));
@@ -44,6 +46,7 @@ const UsersList = () => {
     };
 
     const handleSelectedProf = (item) => {
+        setSearch("");
         setSelectedProf(item);
     };
     const handleClearSelected = () => {
@@ -52,12 +55,25 @@ const UsersList = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
+    const handleSearch = (e) => {
+        setSelectedProf();
+        setSearch(e.target.value);
+    };
 
     if (users && professions) {
+        const usersSearch = users.filter((item) =>
+            item.name
+                .split(" ")
+                .join("")
+                .toLowerCase()
+                .includes(search.split(" ").join("").toLowerCase())
+        );
         const arrProfessions = users.map((item) => item.profession.name);
         const filteredUsers = selectedProf
             ? users.filter((user) => _.isEqual(user.profession, selectedProf))
-            : users;
+            : usersSearch.length !== 0
+                ? usersSearch
+                : users;
         const sortedUsers = _.orderBy(
             filteredUsers,
             [sortBy.iter],
@@ -94,6 +110,10 @@ const UsersList = () => {
                             </div>
                             <div className="d-flex flex-column">
                                 <Header users={filteredUsers} />
+                                <Search
+                                    value={search}
+                                    onSearch={handleSearch}
+                                />
                                 {users.length
                                     ? (
                                         <UsersTable
