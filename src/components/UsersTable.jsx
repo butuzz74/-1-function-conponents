@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import Bookmark from "./Bookmark";
 import QualitiesList from "./QualitiesList";
 import Table from "./Table";
-import Name from "./Name";
+import { Link } from "react-router-dom";
 
 const UsersTable = ({
     userCrop,
@@ -15,7 +15,11 @@ const UsersTable = ({
     onSort
 }) => {
     const colums = {
-        name: { iter: "name", name: "Имя", component: (user) => <Name user={user}/> },
+        name: {
+            iter: "name",
+            name: "Имя",
+            component: (user) => <Link to={`/users/${user._id}`} >{user.name}</Link>
+        },
         qualities: {
             name: "Качества",
             component: (user) => <QualitiesList user={user} />
@@ -61,11 +65,7 @@ const UsersTable = ({
                 onSort={onSort}
                 colums={colums}
             />
-            {userCrop
-                ? (
-                    <TableBody data={userCrop} colums={colums} />
-                )
-                : null}
+            {userCrop ? <TableBody data={userCrop} colums={colums} /> : null}
         </Table>
     );
 };

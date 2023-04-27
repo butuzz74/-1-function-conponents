@@ -3,25 +3,19 @@ import { Link } from "react-router-dom";
 
 const NavBar = () => {
     return (
-        <ul className="nav nav-pills mt-2">
+        <ul className="nav">
             <li className="nav-item">
-                <Link to="/" className="nav-link text-decoration-underline">
+                <Link className="nav-link" aria-current="page" to="/">
                     Main
                 </Link>
             </li>
             <li className="nav-item">
-                <Link
-                    to="/login"
-                    className="nav-link text-decoration-underline"
-                >
+                <Link className="nav-link" aria-current="page" to="/login">
                     Login
                 </Link>
             </li>
             <li className="nav-item">
-                <Link
-                    to="/users"
-                    className="nav-link text-decoration-underline"
-                >
+                <Link className="nav-link" aria-current="page" to="/users">
                     Users
                 </Link>
             </li>

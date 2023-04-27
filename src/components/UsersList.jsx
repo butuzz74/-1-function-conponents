@@ -7,8 +7,9 @@ import Preloader from "./Preloader";
 import API from "../api";
 import _ from "lodash";
 import { paginate } from "../utils/paginate";
+import Search from "./Search";
 
-const Users = () => {
+const UsersList = () => {
     const pageSize = 8;
 
     const [users, setUsers] = useState();
@@ -16,6 +17,7 @@ const Users = () => {
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         API.users.fetchAll().then((data) => setUsers(data));
@@ -44,6 +46,7 @@ const Users = () => {
     };
 
     const handleSelectedProf = (item) => {
+        setSearch("");
         setSelectedProf(item);
     };
     const handleClearSelected = () => {
@@ -52,12 +55,25 @@ const Users = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
+    const handleSearch = (e) => {
+        setSelectedProf();
+        setSearch(e.target.value);
+    };
 
     if (users && professions) {
+        const usersSearch = users.filter((item) =>
+            item.name
+                .split(" ")
+                .join("")
+                .toLowerCase()
+                .includes(search.split(" ").join("").toLowerCase())
+        );
         const arrProfessions = users.map((item) => item.profession.name);
         const filteredUsers = selectedProf
             ? users.filter((user) => _.isEqual(user.profession, selectedProf))
-            : users;
+            : usersSearch.length !== 0
+                ? usersSearch
+                : users;
         const sortedUsers = _.orderBy(
             filteredUsers,
             [sortBy.iter],
@@ -94,6 +110,10 @@ const Users = () => {
                             </div>
                             <div className="d-flex flex-column">
                                 <Header users={filteredUsers} />
+                                <Search
+                                    value={search}
+                                    onSearch={handleSearch}
+                                />
                                 {users.length
                                     ? (
                                         <UsersTable
@@ -126,4 +146,4 @@ const Users = () => {
     }
 };
 
-export default Users;
+export default UsersList;
