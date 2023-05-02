@@ -17,6 +17,7 @@ const UsersPage = ({ userId }) => {
     const handleGoToEditUses = () => {
         history.push(`/users/${userId}/edit`);
     };
+    console.log(user);
     if (user) {
         return (
             <>
