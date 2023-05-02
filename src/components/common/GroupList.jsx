@@ -10,7 +10,9 @@ const GroupList = ({
     contentProperty,
     arrProfessions
 }) => {
-    const professionsArr = Array.isArray(professions) ? professions : Object.values(professions);
+    const professionsArr = Array.isArray(professions)
+        ? professions
+        : Object.values(professions);
     return (
         <>
             <ul className="list-group">
@@ -18,14 +20,10 @@ const GroupList = ({
                     <li
                         key={item[valueProperty]}
                         className={
-                            arrProfessions.includes((item[contentProperty]))
-                                ? (
-                                    `list-group-item + ${
-                                        selectedProf === item
-                                            ? "active"
-                                            : ""
-                                    }`
-                                )
+                            arrProfessions.includes(item[contentProperty])
+                                ? `list-group-item + ${
+                                    selectedProf === item ? "active" : ""
+                                }`
                                 : "list-group-item list-group-item-action disabled"
                         }
                         role="button"
