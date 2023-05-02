@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "./Pagination";
-import UsersTable from "./UsersTable";
-import GroupList from "./GroupList";
-import Header from "./Header";
-import Preloader from "./Preloader";
-import API from "../api";
+import Pagination from "../../common/Pagination";
+import UsersTable from "../../ui/UsersTable";
+import GroupList from "../../common/GroupList";
+import Header from "../../ui/Header";
+import Preloader from "../../common/Preloader";
+import API from "../../../api";
 import _ from "lodash";
-import { paginate } from "../utils/paginate";
-import Search from "./Search";
+import { paginate } from "../../../utils/paginate";
+import Search from "../../Search";
 
 const UsersList = () => {
     const pageSize = 8;
@@ -26,7 +26,6 @@ const UsersList = () => {
     useEffect(() => {
         API.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
-
     const handleDeleteUser = (id) => {
         setUsers(users.filter((user) => user._id !== id));
     };

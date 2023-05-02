@@ -1,10 +1,8 @@
 import React from "react";
-import TableBody from "./TableBody";
-import TableHeader from "./TableHeader";
+import { Table, TableBody, TableHeader } from "../common/table";
 import PropTypes from "prop-types";
-import Bookmark from "./Bookmark";
-import QualitiesList from "./QualitiesList";
-import Table from "./Table";
+import Bookmark from "../common/Bookmark";
+import QualitiesList from "./qualities";
 import { Link } from "react-router-dom";
 
 const UsersTable = ({
@@ -18,7 +16,9 @@ const UsersTable = ({
         name: {
             iter: "name",
             name: "Имя",
-            component: (user) => <Link to={`/users/${user._id}`} >{user.name}</Link>
+            component: (user) => (
+                <Link to={`/users/${user._id}`}>{user.name}</Link>
+            )
         },
         qualities: {
             name: "Качества",
