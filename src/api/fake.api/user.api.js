@@ -195,17 +195,6 @@ const getById = (id) =>
             );
         }, 1000);
     });
-<<<<<<< HEAD
-=======
-
-const getById = (id) =>
-    new Promise((resolve) =>
-        window.setTimeout(function() {
-            resolve(users.find((user) => user._id === id));
-        }, 1000)
-    );
-
->>>>>>> 3149877503cb676f0c77642f3c968304440e5c99
 export default {
     fetchAll,
     getById,
