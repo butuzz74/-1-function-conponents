@@ -29,7 +29,7 @@ const UsersPage = ({ userId }) => {
                     Все пользователи
                 </button>
                 <button className="me-2" onClick={handleGoToEditUses}>
-                    Редактировать данные клиента
+                        Редактировать данные клиента
                 </button>
             </>
         );
