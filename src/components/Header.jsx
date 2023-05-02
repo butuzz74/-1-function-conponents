@@ -2,21 +2,22 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Header = (props) => {
-    if (!props.users.length) {
+    const { users } = props;
+    if (!users.length) {
         return <h1 className="badge bg-danger fs-2">
             Никто не тусанет с тобой сегодня </h1>;
     } else {
-        return props.users.length > 4 || props.users.length === 1
+        return users.length > 4 || users.length === 1
             ? <h1 className="badge bg-primary fs-2">
-                {props.users.length} человек тусанет с тобой сегодня{" "}
+                {users.length} человек тусанет с тобой сегодня{" "}
             </h1>
             : <h1 className="badge bg-primary fs-2">
-                {props.users.length} человека тусанет с тобой сегодня
+                {users.length} человека тусанет с тобой сегодня
             </h1>;
     };
 };
 Header.propTypes = {
-    users: PropTypes.array.isRequired
+    users: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 export default Header;

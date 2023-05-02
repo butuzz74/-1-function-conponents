@@ -1,36 +1,23 @@
-import React, { useState } from "react";
-import API from "../api";
-import Header from "./Header";
-import Users from "./Users";
+import React from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+
+import Login from "../layout/Login";
+import Main from "../layout/Main";
+import NavBar from "./NavBar";
+import Users from "../layout/Users";
 
 const App = () => {
-    const [users, setUsers] = useState(API.users.fetchAll());
-    const handleDelete = (id) => {
-        setUsers(users.filter((user) => user._id !== id));
-    };
-    const handleChange = (id) => {
-        setUsers(
-            users.map((user) => {
-                if (user._id === id) {
-                    user.bookmark = !user.bookmark;
-                }
-                return user;
-            })
-        );
-    };
-
-    return !users.length
-        ? <Header users={users} />
-        : (
-            <>
-                <Header users={users} />
-                <Users
-                    users={users}
-                    handleDelete={handleDelete}
-                    handleChange={handleChange}
-                />
-            </>
-        );
+    return (
+        <div>
+            <NavBar />
+            <Switch>
+                <Route path="/users/:userId?" component={Users} />
+                <Route path="/login" component={Login} />
+                <Route path="/" component={Main} />
+                <Redirect to="/" />
+            </Switch>
+        </div>
+    );
 };
 
 export default App;

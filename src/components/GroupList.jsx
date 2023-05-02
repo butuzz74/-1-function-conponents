@@ -1,37 +1,61 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const GroupList = ({ items, onItemSelect, selectedProf, onClearFiltered }) => {
+const GroupList = ({
+    professions,
+    onSelectedProf,
+    selectedProf,
+    onClearSelected,
+    valueProperty,
+    contentProperty,
+    arrProfessions
+}) => {
+    const professionsArr = Array.isArray(professions) ? professions : Object.values(professions);
     return (
         <>
             <ul className="list-group">
-                {Object.keys(items).map((key) => (
+                {professionsArr.map((item) => (
                     <li
-                        className={`list-group-item + ${
-                            items[key] === selectedProf ? "active" : null
-                        }`}
+                        key={item[valueProperty]}
+                        className={
+                            arrProfessions.includes((item[contentProperty]))
+                                ? (
+                                    `list-group-item + ${
+                                        selectedProf === item
+                                            ? "active"
+                                            : ""
+                                    }`
+                                )
+                                : "list-group-item list-group-item-action disabled"
+                        }
                         role="button"
-                        key={items[key]._id}
-                        onClick={() => onItemSelect(items[key])}
+                        onClick={() => onSelectedProf(item)}
                     >
-                        {items[key].name}
+                        {item[contentProperty]}
                     </li>
                 ))}
                 <li
-                    className="list-group-item"
+                    className="list-group-item active mt-2"
                     role="button"
-                    onClick={onClearFiltered}
+                    onClick={onClearSelected}
                 >
-                    Oчистить
+                    Очистить
                 </li>
             </ul>
         </>
     );
 };
+GroupList.defaultProps = {
+    valueProperty: "_id",
+    contentProperty: "name"
+};
 GroupList.propTypes = {
-    items: PropTypes.object.isRequired,
-    onItemSelect: PropTypes.func.isRequired,
+    professions: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    onSelectedProf: PropTypes.func.isRequired,
     selectedProf: PropTypes.object,
-    onClearFiltered: PropTypes.func
+    onClearSelected: PropTypes.func.isRequired,
+    valueProperty: PropTypes.string.isRequired,
+    contentProperty: PropTypes.string.isRequired,
+    arrProfessions: PropTypes.array
 };
 export default GroupList;
