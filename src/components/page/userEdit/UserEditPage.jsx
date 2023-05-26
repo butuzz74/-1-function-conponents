@@ -128,6 +128,14 @@ const UserEditPage = () => {
     return (
         data && (
             <div className="container mt-5">
+                <div className="d-flex justify-content-start">
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => history.goBack()}
+                    >
+                        Назад
+                    </button>
+                </div>
                 <div className="row">
                     <div className="col-md-6 offset-md-3 p-4 shadow">
                         <h3>Edit</h3>
