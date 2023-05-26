@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import API from "../../../api";
-import QualitiesList from "../../ui/qualities/QualitiesList";
+import CardOfUser from "../../common/user/CardOfUser";
+import CardOfQuality from "../../common/user/CardOfQuality";
+import CardOfMeeting from "../../common/user/CardOfMeeting";
+import Container from "../../ui/Container";
+import Wrapper from "../../ui/Wrapper";
+import CardOfNewComment from "../../common/user/CardOfNewComment";
+import CardOfComment from "../../common/user/CardOfComment";
 
 const UsersPage = ({ userId }) => {
     const [user, setUser] = useState();
@@ -11,28 +17,27 @@ const UsersPage = ({ userId }) => {
     useEffect(() => {
         API.users.getById(userId).then((data) => setUser(data));
     }, []);
-    const handleGoToAllUsers = () => {
-        history.push("/users");
-    };
     const handleGoToEditUses = () => {
         history.push(`/users/${userId}/edit`);
     };
-    console.log(user);
     if (user) {
         return (
-            <>
-                <h1>Имя: {user.name}</h1>
-                <h2>Профессия: {user.profession.name}</h2>
-                <h2>Качества: {<QualitiesList user={user} />} </h2>
-                <h2>Встретился, раз: {user.completedMeetings} </h2>
-                <h2>Оценка: {user.rate} </h2>
-                <button className="me-2" onClick={handleGoToAllUsers}>
-                    Все пользователи
-                </button>
-                <button className="me-2" onClick={handleGoToEditUses}>
-                        Редактировать данные клиента
-                </button>
-            </>
+            <Container>
+                <Wrapper className={"col-md-4 mb-3"}>
+                    <CardOfUser
+                        name={user.name}
+                        profession={user.profession.name}
+                        rate={user.rate}
+                        onClick={handleGoToEditUses}
+                    />
+                    <CardOfQuality user={user} />
+                    <CardOfMeeting completedMeetings={user.completedMeetings} />
+                </Wrapper>
+                <Wrapper className={"col-md-8"}>
+                    <CardOfNewComment userId={userId} />
+                    <CardOfComment userId={userId} />
+                </Wrapper>
+            </Container>
         );
     }
     return <h1>Loading</h1>;
