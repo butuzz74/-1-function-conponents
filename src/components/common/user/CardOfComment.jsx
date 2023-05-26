@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Comments from "./Comments";
-import API from "../../../api";
+// import API from "../../../api";
 
-const CardOfComment = ({ userId }) => {
-    const [comments, setComments] = useState();
-    const [users, setUsers] = useState();
+const CardOfComment = ({ userId, comments, users, onRemove }) => {
+    // const [comments, setComments] = useState();
+    // const [users, setUsers] = useState();
 
-    useEffect(() => {
-        API.comments
-            .fetchCommentsForUser(userId)
-            .then((data) => setComments(data));
-        API.users
-            .fetchAll()
-            .then((data) =>
-                setUsers(data.map((el) => ({ name: el.name, _id: el._id })))
-            );
-    }, []);
-    const handleRemoveComment = (id) => {
-        API.comments.remove(id);
-        API.comments
-            .fetchCommentsForUser(userId)
-            .then((data) => setComments(data));
-    };
+    // useEffect(() => {
+    //     API.comments
+    //         .fetchCommentsForUser(userId)
+    //         .then((data) => setComments(data.sort(function(a, b) { return +a.created_at - +b.created_at; })));
+    //     API.users
+    //         .fetchAll()
+    //         .then((data) =>
+    //             setUsers(data.map((el) => ({ name: el.name, _id: el._id })))
+    //         );
+    // }, []);
+    // const handleRemoveComment = (id) => {
+    //     API.comments.remove(id);
+    //     API.comments
+    //         .fetchCommentsForUser(userId)
+    //         .then((data) => setComments(data.sort(function(a, b) { return +a.created_at - +b.created_at; })));
+    // };
 
     return (
         comments && comments.length
@@ -38,7 +38,7 @@ const CardOfComment = ({ userId }) => {
                                         <Comments
                                             comments={comments}
                                             users={users}
-                                            onRemove={handleRemoveComment}
+                                            onRemove={onRemove}
                                         />
                                     )}
                                 </div>
@@ -52,6 +52,9 @@ const CardOfComment = ({ userId }) => {
 };
 
 CardOfComment.propTypes = {
-    userId: PropTypes.string
+    userId: PropTypes.string,
+    onRemove: PropTypes.func,
+    comments: PropTypes.array,
+    users: PropTypes.array
 };
 export default CardOfComment;

@@ -16,8 +16,8 @@ const CardOfNewComment = ({ userId }) => {
     const [errors, setErrors] = useState({});
     useEffect(() => {
         API.users.fetchAll().then((data) => {
-            const filterUsers = data.filter(user => user._id !== userId);
-            const usersList = filterUsers.map((user) => ({
+            // const filterUsers = data.filter(user => user._id !== userId);
+            const usersList = data.map((user) => ({
                 label: user.name,
                 value: user.name
             }));
