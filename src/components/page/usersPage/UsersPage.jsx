@@ -13,6 +13,33 @@ import CardOfComment from "../../common/user/CardOfComment";
 const UsersPage = ({ userId }) => {
     const [user, setUser] = useState();
     const history = useHistory();
+    const [comments, setComments] = useState();
+    const [usersList, setUsersList] = useState();
+
+    useEffect(() => {
+        API.comments.fetchCommentsForUser(userId).then((data) =>
+            setComments(
+                data.sort(function(a, b) {
+                    return +b.created_at - +a.created_at;
+                })
+            )
+        );
+        API.users
+            .fetchAll()
+            .then((data) =>
+                setUsersList(data.map((el) => ({ name: el.name, _id: el._id })))
+            );
+    }, [comments]);
+    const handleRemoveComment = (id) => {
+        API.comments.remove(id);
+        API.comments.fetchCommentsForUser(userId).then((data) =>
+            setComments(
+                data.sort(function(a, b) {
+                    return +b.created_at - +a.created_at;
+                })
+            )
+        );
+    };
 
     useEffect(() => {
         API.users.getById(userId).then((data) => setUser(data));
@@ -35,7 +62,12 @@ const UsersPage = ({ userId }) => {
                 </Wrapper>
                 <Wrapper className={"col-md-8"}>
                     <CardOfNewComment userId={userId} />
-                    <CardOfComment userId={userId} />
+                    <CardOfComment
+                        userId={userId}
+                        comments={comments}
+                        users={usersList}
+                        onRemove={handleRemoveComment}
+                    />
                 </Wrapper>
             </Container>
         );
